@@ -12,10 +12,10 @@ Quick way: use `namedmap` convenience function.
 ```python
 >>> from namedmaps import namedmap
 >>> RGB = namedmap('RGB', ['red', 'green', 'blue'])
->>> rgb = RGB(red='rouge', green='forest', blue='azul')
+>>> rgb = RGB(red='rouge', green='forest', blue='azul') # keys and values are immutable
 # ...
 >>> CMYK = namedmap('CMYK', ['cyan', 'magenta', 'yellow', 'black'], mutable_values=True)
->>> cmyk = CMYK(255, 30, 25, 55) # same API as above, except...
+>>> cmyk = CMYK(255, 30, 25, 55) # keys are fixed, but we can edit values
 ```
 
 `RGB` is made via `NamedMap`, and `CMYK` is made via `FixedKeyNamedMap` (more details below).
