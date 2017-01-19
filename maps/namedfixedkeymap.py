@@ -1,8 +1,8 @@
 import abc
-import namedmaps.utils as utils
-from namedmaps.fixedkeymap import FixedKeyMap
+import maps.utils as utils
+from maps.fixedkeymap import FixedKeyMap
 
-class FixedKeyNamedMap(abc.ABCMeta):
+class NamedFixedKeyMapMeta(abc.ABCMeta):
     def __new__(cls, typename, fields=[]):
         # validate names
         for name in [typename] + fields:
