@@ -36,8 +36,12 @@ RGB(red='rouge', green='forest', blue='azul')
 >>> rgb.green # access via dot-notation
 'forest'
 >>> rgb['grey']
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 KeyError: 'grey'
 >>> rgb.gray
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 AttributeError: 'RGB' object has no attribute 'gray'
 >>> rgb.blue = 'topaz' # NamedMaps are immutable
 AttributeError: can't set attribute
@@ -57,7 +61,11 @@ CMYK(255, 30, 25, 55)
 >>> print(cmyk)
 CMYK(255, 30, 25, 100)
 >>> cmyk['grey'] # cannot add new keys
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 KeyError: 'grey'
 >>> cmyk.gray # cannot add new keys
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 AttributeError: 'CMYK' object has no attribute 'gray'
 ```
