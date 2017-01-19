@@ -44,6 +44,8 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AttributeError: 'RGB' object has no attribute 'gray'
 >>> rgb.blue = 'topaz' # NamedMaps are immutable
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
 AttributeError: can't set attribute
 ```
 
