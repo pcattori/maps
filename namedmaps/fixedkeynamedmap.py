@@ -1,9 +1,8 @@
 import abc
-import collections
 import namedmaps.utils as utils
-from namedmaps.editmap import EditMap
+from namedmaps.fixedkeymap import FixedKeyMap
 
-class NamedEditMap(abc.ABCMeta):
+class FixedKeyNamedMap(abc.ABCMeta):
     def __new__(cls, typename, fields=[]):
         # validate names
         for name in [typename] + fields:
@@ -23,16 +22,12 @@ class NamedEditMap(abc.ABCMeta):
 
         def repr__(self):
             kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
-            return f'{self.__class__.__name__}({kwargs})'
+            return f'{typename}({kwargs})'
 
         methods = {
             '__getattr__': getattr__,
-            '__setattr__': setattr__,
-            # '__getitem__': EditMap.__getitem__,
-            # '__setitem__': EditMap.__setitem__,
-            # '__iter__': EditMap.__iter__,
-            # '__len__': EditMap.__len__,
-            '__repr__': repr__}
+            '__repr__': repr__,
+            '__setattr__': setattr__}
 
         # handle custom __init__
         template = '\n'.join([
@@ -40,9 +35,7 @@ class NamedEditMap(abc.ABCMeta):
             '    super(self.__class__, self).__init__({kwargs})'])
         args = ', '.join(fields)
         kwargs = ', '.join([f'{i}={i}' for i in fields])
-        namespace = {'collections': collections}
-        exec(template.format(args=args, kwargs=kwargs), namespace)
-        methods['__init__'] = namespace['__init__']
+        exec(template.format(args=args, kwargs=kwargs), methods)
 
         return super().__new__(cls, typename, (EditMap,), methods)
 

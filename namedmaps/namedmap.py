@@ -1,5 +1,6 @@
 import abc
 import collections
+import collections.abc
 import namedmaps.utils as utils
 
 class NamedMap(abc.ABCMeta):
@@ -15,6 +16,8 @@ class NamedMap(abc.ABCMeta):
 
         def setattr__(self, name, value):
             if not name.startswith('_'):
+                if name in self._dict:
+                    raise AttributeError("can't set attribute")
                 raise AttributeError(f"'{typename}' object has no attribute {name!r}")
             super(self.__class__, self).__setattr__(name, value)
 
@@ -27,8 +30,8 @@ class NamedMap(abc.ABCMeta):
             '__getitem__': lambda self, name: self._data[name],
             '__iter__': lambda self: iter(self._data),
             '__len__': lambda self: len(self._data),
-            '__repr__': repr__}
-            '__setattr__': setattr__,
+            '__repr__': repr__,
+            '__setattr__': setattr__}
 
         # handle custom __init__
         template = '\n'.join([
@@ -41,7 +44,7 @@ class NamedMap(abc.ABCMeta):
         exec(template.format(args=args, kwargs=kwargs), namespace)
         methods['__init__'] = namespace['__init__']
 
-        return super().__new__(cls, typename, (collections.Mapping,), methods)
+        return super().__new__(cls, typename, (collections.abc.Mapping,), methods)
 
     def __init__(cls, name, fields=[]):
         super().__init__(cls)

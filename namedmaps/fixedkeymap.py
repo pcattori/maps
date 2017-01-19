@@ -1,6 +1,7 @@
 import collections
+import collections.abc
 
-class EditMap(collections.MutableMapping):
+class FixedKeyMap(collections.abc.MutableMapping):
     def __init__(self, *args, **kwargs):
         self._data = collections.OrderedDict(*args, **kwargs)
 
@@ -14,7 +15,8 @@ class EditMap(collections.MutableMapping):
         return len(self._data)
 
     def __delitem__(self, name):
-        raise NotImplementedError
+        raise TypeError(
+            f"{self.__class__.__name__} object doesn't support item deletion")
 
     def __setitem__(self, name, value):
         if name not in self._data:
