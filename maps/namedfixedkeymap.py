@@ -9,6 +9,8 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
             utils._validate_name(name)
         utils._validate_fields(fields)
 
+        cls._fields = tuple(fields)
+
         def getattr__(self, name):
             try:
                 return self._data[name]
