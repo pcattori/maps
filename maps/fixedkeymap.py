@@ -16,10 +16,11 @@ class FixedKeyMap(collections.abc.MutableMapping):
 
     def __delitem__(self, name):
         raise TypeError(
-            f"{self.__class__.__name__} object doesn't support item deletion")
+            f"'{self.__class__.__name__}' object does not support item deletion")
 
     def __setitem__(self, name, value):
         if name not in self._data:
-            raise KeyError(name)
+            raise TypeError(
+                f"'{self.__class__.__name__}' object does not support new item assignment")
         self._data[name] = value
 

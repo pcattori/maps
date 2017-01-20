@@ -21,6 +21,6 @@ class FrozenMap(collections.abc.Mapping):
             self._hash = hash(frozenset(self.items()))
         return self._hash
 
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         kwargs = ', '.join(f'{key!r}: {value!r}' for key, value in self.items())
         return f'{self.__class__.__name__}({{{kwargs}}})'
