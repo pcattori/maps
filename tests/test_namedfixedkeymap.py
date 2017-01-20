@@ -118,5 +118,9 @@ class NamedFixedKeyMapMetaTest(unittest.TestCase):
             next(it)
         self.assertEqual(str(context.exception), '')
 
+    def test_class_fields(self):
+        RGB = NamedFixedKeyMapMeta('RGB', ['red', 'green', 'blue'])
+        self.assertEqual(RGB._fields, ('red', 'green', 'blue'))
+
 if __name__ == '__main__':
     unittest.main()
