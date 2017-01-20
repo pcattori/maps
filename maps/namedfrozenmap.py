@@ -1,9 +1,10 @@
 import abc
 import collections
 import collections.abc
-import namedmaps.utils as utils
+import maps.utils as utils
+from maps.frozenmap import FrozenMap
 
-class NamedMap(abc.ABCMeta):
+class NamedFrozenMapMeta(abc.ABCMeta):
     def __new__(cls, typename, fields=[]):
         # validate names
         for name in [typename] + fields:
@@ -12,24 +13,24 @@ class NamedMap(abc.ABCMeta):
 
         # common methods
         def getattr__(self, name):
-            return self._data[name]
+            try:
+                return self._data[name]
+            except KeyError:
+                raise AttributeError(f"'{typename}' object has no attribute {name!r}")
 
         def setattr__(self, name, value):
             if not name.startswith('_'):
-                if name in self._dict:
+                if name in self._data:
                     raise AttributeError("can't set attribute")
                 raise AttributeError(f"'{typename}' object has no attribute {name!r}")
             super(self.__class__, self).__setattr__(name, value)
 
-        def repr__(self):
+        def repr__(self): # pragma: no cover
             kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
             return f'{typename}({kwargs})'
 
         methods = {
             '__getattr__': getattr__,
-            '__getitem__': lambda self, name: self._data[name],
-            '__iter__': lambda self: iter(self._data),
-            '__len__': lambda self: len(self._data),
             '__repr__': repr__,
             '__setattr__': setattr__}
 
@@ -44,7 +45,7 @@ class NamedMap(abc.ABCMeta):
         exec(template.format(args=args, kwargs=kwargs), namespace)
         methods['__init__'] = namespace['__init__']
 
-        return super().__new__(cls, typename, (collections.abc.Mapping,), methods)
+        return super().__new__(cls, typename, (FrozenMap,), methods)
 
     def __init__(cls, name, fields=[]):
         super().__init__(cls)

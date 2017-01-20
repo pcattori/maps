@@ -20,5 +20,5 @@ def _validate_fields(fields):
             raise ValueError(
                 f'Field names cannot start with an underscore: {name!r}')
         if name in seen_names:
-            raise ValueError('Encountered duplicate field name: {name!r}')
+            raise ValueError(f'Encountered duplicate field name: {name!r}')
         seen_names.add(name)

@@ -1,8 +1,8 @@
 import abc
-import namedmaps.utils as utils
-from namedmaps.fixedkeymap import FixedKeyMap
+import maps.utils as utils
+from maps.fixedkeymap import FixedKeyMap
 
-class FixedKeyNamedMap(abc.ABCMeta):
+class NamedFixedKeyMapMeta(abc.ABCMeta):
     def __new__(cls, typename, fields=[]):
         # validate names
         for name in [typename] + fields:
@@ -10,7 +10,10 @@ class FixedKeyNamedMap(abc.ABCMeta):
         utils._validate_fields(fields)
 
         def getattr__(self, name):
-            return self._data[name]
+            try:
+                return self._data[name]
+            except KeyError:
+                raise AttributeError(f"'{typename}' object has no attribute {name!r}")
 
         def setattr__(self, name, value):
             if name.startswith('_'):
@@ -18,9 +21,9 @@ class FixedKeyNamedMap(abc.ABCMeta):
             elif name in self._data:
                 self._data[name] = value
             else:
-                raise AttributeError("'{typename}' object has no attribute {name!r}")
+                raise AttributeError(f"'{typename}' object has no attribute {name!r}")
 
-        def repr__(self):
+        def repr__(self): # pragma: no cover
             kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
             return f'{typename}({kwargs})'
 
@@ -37,7 +40,7 @@ class FixedKeyNamedMap(abc.ABCMeta):
         kwargs = ', '.join([f'{i}={i}' for i in fields])
         exec(template.format(args=args, kwargs=kwargs), methods)
 
-        return super().__new__(cls, typename, (EditMap,), methods)
+        return super().__new__(cls, typename, (FixedKeyMap,), methods)
 
     def __init__(cls, name, fields=[]):
         super().__init__(cls)
