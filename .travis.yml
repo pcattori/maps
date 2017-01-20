@@ -1,5 +1,5 @@
 language: python
 python: 3.6
 install: pip install .[test]
-script: coverage run --source namespaces setup.py test
+script: coverage run --source maps setup.py test
 after_success: codecov
