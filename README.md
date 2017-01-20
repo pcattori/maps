@@ -7,31 +7,31 @@
 ## Install
 
 ```sh
-$ pip install namedmaps
+$ pip install maps
 ```
 ## API
 
 Quick way: use `namedmap` convenience function.
 
 ```python
->>> from namedmaps import namedmap
->>> RGB = namedmap('RGB', ['red', 'green', 'blue'])
+>>> import maps
+>>> RGB = maps.namedmap('RGB', ['red', 'green', 'blue'])
 >>> rgb = RGB(red='rouge', green='forest', blue='azul') # keys and values are immutable
 # ...
->>> CMYK = namedmap('CMYK', ['cyan', 'magenta', 'yellow', 'black'], mutable_values=True)
+>>> CMYK = maps.namedmap('CMYK', ['cyan', 'magenta', 'yellow', 'black'], fixed_keys=True)
 >>> cmyk = CMYK(255, 30, 25, 55) # keys are fixed, but we can edit values
 ```
 
 `RGB` is made via `NamedMap`, and `CMYK` is made via `FixedKeyNamedMap` (more details below).
 
 
-### NamedMap
+### NamedFrozenMapMeta
 
-`NamedMap` is a `collections.abc.Mapping` version of `namedtuple`.
+`NamedFrozenMapMeta` is like `namedtuple` but based off of an immutable implementation of `collections.abc.Mapping` instead of `tuple`.
 
 ```python
->>> from namedmaps import NamedMap
->>> RGB = NamedMap('RGB', ['red', 'green', 'blue'])
+>>> import maps
+>>> RGB = maps.NamedFrozenMapMeta('RGB', ['red', 'green', 'blue'])
 >>> rgb = RGB(red='rouge', green='forest', blue='azul')
 >>> print(rgb)
 RGB(red='rouge', green='forest', blue='azul')
@@ -53,13 +53,13 @@ Traceback (most recent call last):
 AttributeError: can't set attribute
 ```
 
-### FixedKeyNamedMap
+### NamedFixedKeyMapMeta
 
-`FixedKeyNamedMap` is a bit more flexible by allowing edits to existing keys.
+`NamedFixedKeyMapMeta` is a bit more flexible by allowing edits to existing keys.
 
 ```python
->>> from namedmaps import FixedKeyNamedMap
->>> CMYK = FixedKeyNamedMap('CMYK', ['cyan', 'magenta', 'yellow', 'black'])
+>>> import maps
+>>> CMYK = NamedFixedKeyMapMeta('CMYK', ['cyan', 'magenta', 'yellow', 'black'])
 >>> cmyk = CMYK(255, 30, 25, 55) # same API as above, except...
 >>> print(cymk)
 CMYK(255, 30, 25, 55)
