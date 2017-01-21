@@ -113,5 +113,5 @@ AttributeError: 'CMYK' object has no attribute 'gray'
 >>> rgb.gray = 'pewter' # cannot add new keys
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-TypeError: 'CMYK' object does not suppoer new attribute assignment
+TypeError: 'CMYK' object does not support new attribute assignment
 ```
