@@ -110,7 +110,7 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AttributeError: 'CMYK' object has no attribute 'gray'
 
->>> rgb.gray == 'pewter' # cannot add new keys
+>>> rgb.gray = 'pewter' # cannot add new keys
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AttributeError: 'CMYK' object has no attribute 'gray'
