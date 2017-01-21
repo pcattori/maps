@@ -24,7 +24,8 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
             elif name in self._data:
                 self._data[name] = value
             else:
-                raise AttributeError(f"'{typename}' object has no attribute {name!r}")
+                raise TypeError(
+                    f"'{typename}' object does not support new attribute assignment")
 
         def repr__(self): # pragma: no cover
             kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())

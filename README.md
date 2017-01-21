@@ -72,12 +72,12 @@ AttributeError: 'RGB' object has no attribute 'gray'
 >>> rgb.gray = 'pewter'
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-AttributeError: 'RGB' object has no attribute 'gray'
+TypeError: 'RGB' object does not support attribute assignment
 
 >>> rgb.blue = 'topaz' # NamedMaps are immutable
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-AttributeError: can't set attribute
+TypeError: 'RGB' object does not support attribute assignment
 ```
 
 ### namedfixedkey
@@ -103,7 +103,7 @@ KeyError: 'grey'
 >>> rgb['grey'] = 'pewter' # cannot add new keys
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-TypeError: 'CMYK' object does not support item assignment
+TypeError: 'CMYK' object does not support new item assignment
 
 >>> cmyk.gray
 Traceback (most recent call last):
@@ -113,5 +113,5 @@ AttributeError: 'CMYK' object has no attribute 'gray'
 >>> rgb.gray = 'pewter' # cannot add new keys
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-AttributeError: 'CMYK' object has no attribute 'gray'
+TypeError: 'CMYK' object does not suppoer new attribute assignment
 ```
