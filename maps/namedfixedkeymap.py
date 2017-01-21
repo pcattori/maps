@@ -20,7 +20,7 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
 
         def setattr__(self, name, value):
             if name.startswith('_'):
-                super(self.__class__, self).__setattr__(name, value)
+                super(type(self), self).__setattr__(name, value)
             elif name in self._data:
                 self._data[name] = value
             else:
@@ -39,7 +39,7 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
         # handle custom __init__
         template = '\n'.join([
             'def __init__(self, {args}):',
-            '    super(self.__class__, self).__init__({kwargs})'])
+            '    super(type(self), self).__init__({kwargs})'])
         args = ', '.join(fields)
         kwargs = ', '.join([f'{i}={i}' for i in fields])
         exec(template.format(args=args, kwargs=kwargs), methods)

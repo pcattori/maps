@@ -25,7 +25,7 @@ class NamedFrozenMapMeta(abc.ABCMeta):
             if not name.startswith('_'):
                 raise TypeError(
                     f"'{typename}' object does not support attribute assignment")
-            super(self.__class__, self).__setattr__(name, value)
+            super(type(self), self).__setattr__(name, value)
 
         def repr__(self): # pragma: no cover
             kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
@@ -39,7 +39,7 @@ class NamedFrozenMapMeta(abc.ABCMeta):
         # handle custom __init__
         template = '\n'.join([
             'def __init__(self, {args}):',
-            '    super(self.__class__, self).__init__()',
+            '    super(type(self), self).__init__()',
             '    self._data = collections.OrderedDict({kwargs})'])
         args = ', '.join(fields)
         kwargs = ', '.join([f'{i}={i}' for i in fields])
