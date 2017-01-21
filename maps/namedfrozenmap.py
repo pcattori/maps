@@ -6,12 +6,13 @@ from maps.frozenmap import FrozenMap
 
 class NamedFrozenMapMeta(abc.ABCMeta):
     def __new__(cls, typename, fields=[]):
+        fields = tuple(fields)
         # validate names
-        for name in [typename] + fields:
+        for name in (typename,) + fields:
             utils._validate_name(name)
         utils._validate_fields(fields)
 
-        cls._fields = tuple(fields)
+        cls._fields = fields
 
         # common methods
         def getattr__(self, name):
