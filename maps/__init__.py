@@ -4,7 +4,8 @@ from maps.nameddict import NamedDict
 from maps.namedfixedkeymap import NamedFixedKeyMapMeta
 from maps.namedfrozenmap import NamedFrozenMapMeta
 
-def namedmap(typename, fields, fixed_keys=False):
-    if fixed_keys:
-        return NamedFixedKeyMapMeta(typename, fields)
+def namedfrozen(typename, fields):
     return NamedFrozenMapMeta(typename, fields)
+
+def namedfixedkey(typename, fields):
+    return NamedFixedKeyMapMeta(typename, fields)
