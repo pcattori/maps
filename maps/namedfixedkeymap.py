@@ -3,13 +3,14 @@ import maps.utils as utils
 from maps.fixedkeymap import FixedKeyMap
 
 class NamedFixedKeyMapMeta(abc.ABCMeta):
-    def __new__(cls, typename, fields=[]):
+    def __new__(cls, typename, fields=()):
+        fields = tuple(fields)
         # validate names
-        for name in [typename] + fields:
+        for name in (typename,) + fields:
             utils._validate_name(name)
         utils._validate_fields(fields)
 
-        cls._fields = tuple(fields)
+        cls._fields = fields
 
         def getattr__(self, name):
             try:
