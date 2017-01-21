@@ -95,22 +95,22 @@ CMYK(255, 30, 25, 55)
 >>> print(cmyk)
 CMYK(255, 30, 25, 100)
 
->>> cmyk['grey'] # cannot add new keys
+>>> cmyk['grey']
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 KeyError: 'grey'
 
->>> rgb['grey'] = 'pewter'
+>>> rgb['grey'] = 'pewter' # cannot add new keys
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: 'CMYK' object does not support item assignment
 
->>> cmyk.gray # cannot add new keys
+>>> cmyk.gray
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AttributeError: 'CMYK' object has no attribute 'gray'
 
->>> rgb.gray == 'pewter'
+>>> rgb.gray == 'pewter' # cannot add new keys
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AttributeError: 'CMYK' object has no attribute 'gray'
