@@ -37,8 +37,8 @@ KeyError: 'd'
 
 ### namedfrozen
 
-`namedfrozen` is like `namedtuple` with `collections.abc.Mapping` under the
-hood, instead of `tuple`.
+`namedfrozen` is like `namedtuple`, but with `collections.abc.Mapping` under the
+hood instead of `tuple`.
 
 In other words, its an immutable mapping with access via bracket-notation
 (i.e. `__getitem__`) as well as dot-notation (i.e. `__getattr__`).
