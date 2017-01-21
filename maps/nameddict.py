@@ -8,4 +8,4 @@ class NamedDict(dict):
         self[name] = value
 
     def __repr__(self): # pragma: no cover
-        return f'{self.__class__.__name__}({super().__repr__()})'
+        return f'{type(self).__name__}({super().__repr__()})'
