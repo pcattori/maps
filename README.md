@@ -19,7 +19,7 @@ Just a plain ol' Python `dict`, but super-charged with access via dot-notation
 ```python
 >>> import maps
 >>> d = NamedDict({'a': 1, 'b': 2})
->>> isinstance(d, dict)
+>>> isinstance(d, dict) # drop-in replacement for a `dict`! Can do anything a `dict` can!
 True
 >>> d.a
 1
