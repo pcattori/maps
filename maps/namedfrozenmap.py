@@ -23,9 +23,8 @@ class NamedFrozenMapMeta(abc.ABCMeta):
 
         def setattr__(self, name, value):
             if not name.startswith('_'):
-                if name in self._data:
-                    raise AttributeError("can't set attribute")
-                raise AttributeError(f"'{typename}' object has no attribute {name!r}")
+                raise TypeError(
+                    f"'{typename}' object does not support attribute assignment")
             super(self.__class__, self).__setattr__(name, value)
 
         def repr__(self): # pragma: no cover

@@ -86,15 +86,19 @@ class NamedFrozenMapTest(unittest.TestCase):
             str(context.exception),
             "'RGB' object does not support item assignment")
 
-    def test_setattr_AttributeError(self):
+    def test_setattr_TypeError(self):
         RGB = NamedFrozenMapMeta('RGB', ['red', 'green', 'blue'])
         rgb = RGB(red='rouge', green='forest', blue='azul')
-        with self.assertRaises(AttributeError) as context:
+        with self.assertRaises(TypeError) as context:
             rgb.blue = 'topaz'
-        self.assertEqual(str(context.exception), "can't set attribute")
-        with self.assertRaises(AttributeError) as context:
+        self.assertEqual(
+            str(context.exception),
+            "'RGB' object does not support attribute assignment")
+        with self.assertRaises(TypeError) as context:
             rgb.gray = 'pewter'
-        self.assertEqual(str(context.exception), "'RGB' object has no attribute 'gray'")
+        self.assertEqual(
+            str(context.exception),
+            "'RGB' object does not support attribute assignment")
 
     def test_len(self):
         RGB = NamedFrozenMapMeta('RGB', ['red', 'green', 'blue'])
