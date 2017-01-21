@@ -3,7 +3,7 @@ import maps.utils as utils
 from maps.fixedkeymap import FixedKeyMap
 
 class NamedFixedKeyMapMeta(abc.ABCMeta):
-    def __new__(cls, typename, fields=()):
+    def __new__(cls, typename, fields=[]):
         fields = tuple(fields)
         # validate names
         for name in (typename,) + fields:

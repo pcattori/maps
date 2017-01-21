@@ -5,7 +5,7 @@ import maps.utils as utils
 from maps.frozenmap import FrozenMap
 
 class NamedFrozenMapMeta(abc.ABCMeta):
-    def __new__(cls, typename, fields=()):
+    def __new__(cls, typename, fields=[]):
         fields = tuple(fields)
         # validate names
         for name in (typename,) + fields:
