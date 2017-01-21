@@ -103,7 +103,7 @@ KeyError: 'grey'
 >>> rgb['grey'] = 'pewter' # cannot add new keys
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-TypeError: 'CMYK' object does not support item assignment
+TypeError: 'CMYK' object does not support new item assignment
 
 >>> cmyk.gray
 Traceback (most recent call last):
@@ -113,5 +113,5 @@ AttributeError: 'CMYK' object has no attribute 'gray'
 >>> rgb.gray = 'pewter' # cannot add new keys
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-AttributeError: 'CMYK' object has no attribute 'gray'
+TypeError: 'CMYK' object does not suppoer new attribute assignment
 ```

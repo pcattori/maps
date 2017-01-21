@@ -96,11 +96,11 @@ class NamedFixedKeyMapMetaTest(unittest.TestCase):
     def test_setattr_AttributeError(self):
         RGB = NamedFixedKeyMapMeta('RGB', ['red', 'green', 'blue'])
         rgb = RGB(red='rouge', green='forest', blue='azul')
-        with self.assertRaises(AttributeError) as context:
+        with self.assertRaises(TypeError) as context:
             rgb.gray = 'pewter'
         self.assertEqual(
             str(context.exception),
-            "'RGB' object has no attribute 'gray'")
+            "'RGB' object does not support new attribute assignment")
 
     def test_len(self):
         RGB = NamedFixedKeyMapMeta('RGB', ['red', 'green', 'blue'])
