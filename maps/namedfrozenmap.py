@@ -5,6 +5,25 @@ import maps.utils as utils
 from maps.frozenmap import FrozenMap
 
 class NamedFrozenMapMeta(abc.ABCMeta):
+    @staticmethod
+    def _getattr(self, name):
+        try:
+            return self._data[name]
+        except KeyError:
+            raise AttributeError(f"'{type(self).__name__}' object has no attribute {name!r}")
+
+    @staticmethod
+    def _setattr(self, name, value):
+        if not name.startswith('_'):
+            raise TypeError(
+                f"'{type(self).__name__}' object does not support attribute assignment")
+        super(type(self), self).__setattr__(name, value)
+
+    @staticmethod
+    def _repr(self): # pragma: no cover
+        kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
+        return f'{type(self).__name__}({kwargs})'
+
     def __new__(cls, typename, fields=[]):
         fields = tuple(fields)
         # validate names
@@ -14,27 +33,10 @@ class NamedFrozenMapMeta(abc.ABCMeta):
 
         cls._fields = fields
 
-        # common methods
-        def getattr__(self, name):
-            try:
-                return self._data[name]
-            except KeyError:
-                raise AttributeError(f"'{typename}' object has no attribute {name!r}")
-
-        def setattr__(self, name, value):
-            if not name.startswith('_'):
-                raise TypeError(
-                    f"'{typename}' object does not support attribute assignment")
-            super(type(self), self).__setattr__(name, value)
-
-        def repr__(self): # pragma: no cover
-            kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
-            return f'{typename}({kwargs})'
-
         methods = {
-            '__getattr__': getattr__,
-            '__repr__': repr__,
-            '__setattr__': setattr__}
+            '__getattr__': NamedFrozenMapMeta._getattr,
+            '__repr__': NamedFrozenMapMeta._repr,
+            '__setattr__': NamedFrozenMapMeta._setattr}
 
         # handle custom __init__
         template = '\n'.join([

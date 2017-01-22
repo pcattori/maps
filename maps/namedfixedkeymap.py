@@ -3,6 +3,29 @@ import maps.utils as utils
 from maps.fixedkeymap import FixedKeyMap
 
 class NamedFixedKeyMapMeta(abc.ABCMeta):
+    @staticmethod
+    def _getattr(self, name):
+        try:
+            return self._data[name]
+        except KeyError:
+            raise AttributeError(
+                f"'{type(self).__name__}' object has no attribute {name!r}")
+
+    @staticmethod
+    def _setattr(self, name, value):
+        if name.startswith('_'):
+            super(type(self), self).__setattr__(name, value)
+        elif name in self._data:
+            self._data[name] = value
+        else:
+            raise TypeError(
+                f"'{type(self).__name__}' object does not support new attribute assignment")
+
+    @staticmethod
+    def _repr(self): # pragma: no cover
+        kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
+        return f'{type(self).__name__}({kwargs})'
+
     def __new__(cls, typename, fields=[]):
         fields = tuple(fields)
         # validate names
@@ -12,29 +35,10 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
 
         cls._fields = fields
 
-        def getattr__(self, name):
-            try:
-                return self._data[name]
-            except KeyError:
-                raise AttributeError(f"'{typename}' object has no attribute {name!r}")
-
-        def setattr__(self, name, value):
-            if name.startswith('_'):
-                super(type(self), self).__setattr__(name, value)
-            elif name in self._data:
-                self._data[name] = value
-            else:
-                raise TypeError(
-                    f"'{typename}' object does not support new attribute assignment")
-
-        def repr__(self): # pragma: no cover
-            kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
-            return f'{typename}({kwargs})'
-
         methods = {
-            '__getattr__': getattr__,
-            '__repr__': repr__,
-            '__setattr__': setattr__}
+            '__getattr__': NamedFixedKeyMapMeta._getattr,
+            '__repr__': NamedFixedKeyMapMeta._repr,
+            '__setattr__': NamedFixedKeyMapMeta._setattr}
 
         # handle custom __init__
         template = '\n'.join([
