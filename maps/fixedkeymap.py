@@ -1,9 +1,8 @@
-import collections
 import collections.abc
 
 class FixedKeyMap(collections.abc.MutableMapping):
     def __init__(self, *args, **kwargs):
-        self._data = collections.OrderedDict(*args, **kwargs)
+        self._data = dict(*args, **kwargs)
 
     def __getitem__(self, name):
         return self._data[name]
