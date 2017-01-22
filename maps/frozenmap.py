@@ -1,6 +1,25 @@
 import collections.abc
 
 class FrozenMap(collections.abc.Mapping):
+    '''An immutable, hashable key-value mapping accessible via bracket-notation
+    (i.e. ``__getitem__``).
+
+    :param args: Position arguments in the same form as the :py:class:`dict` constructor.
+    :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
+
+    Usage::
+
+       >>> import maps
+       >>> fm = maps.FrozenMap({'a': 1, 'b': 2})
+       >>> fm['a']
+       1
+       >>> list(fm.items())
+       [('a', 1), ('b', 2)]
+       >>> len(fm)
+       2
+       >>> hash(fm)
+       3212389899479848432
+    '''
 
     def __init__(self, *args, **kwargs):
         self._data = dict(*args, **kwargs)
@@ -16,7 +35,6 @@ class FrozenMap(collections.abc.Mapping):
         return len(self._data)
 
     def __hash__(self):
-        '''Caches lazily-computed hash value.'''
         if self._hash is None:
             self._hash = hash(frozenset(self.items()))
         return self._hash
