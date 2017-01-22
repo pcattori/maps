@@ -12,6 +12,7 @@ User Guide
    :maxdepth: 2
 
    user/design
+   user/install
    user/quickstart
    user/advanced_usage
 
