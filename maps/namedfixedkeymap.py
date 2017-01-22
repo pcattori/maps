@@ -1,4 +1,5 @@
 import abc
+import collections
 import maps.utils as utils
 from maps.fixedkeymap import FixedKeyMap
 
@@ -43,10 +44,13 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
         # handle custom __init__
         template = '\n'.join([
             'def __init__(self, {args}):',
-            '    super(type(self), self).__init__({kwargs})'])
+            '    super(type(self), self).__init__()',
+            '    self._data = collections.OrderedDict({kwargs})'])
         args = ', '.join(fields)
         kwargs = ', '.join([f'{i}={i}' for i in fields])
-        exec(template.format(args=args, kwargs=kwargs), methods)
+        namespace = {'collections': collections}
+        exec(template.format(args=args, kwargs=kwargs), namespace)
+        methods['__init__'] = namespace['__init__']
 
         return super().__new__(cls, typename, (FixedKeyMap,), methods)
 
