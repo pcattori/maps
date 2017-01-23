@@ -4,8 +4,42 @@ import maps.utils as utils
 from maps.fixedkeymap import FixedKeyMap
 
 class NamedFixedKeyMapMeta(abc.ABCMeta):
+    '''Metaclass for instantiating subclasses of :class:`maps.FixedKeyMap`, each
+    defined with a specific set of fields. Similar to
+    :py:func:`collections.namedtuple`, the names of these fields can be
+    accessed via the ``_fields`` attribute of the instantiated subclass.
+
+    This metaclass injects 3 methods into the subclass:
+    ``__getattr__``, ``__setattr__``, and ``__repr__``.
+
+    1. ``__getattr__`` attempts to retrieve attributes from an instance's
+    underlying ``_data`` dictionary, raising :py:exc:`AttributeError`
+    if the attribute is not found.
+
+    2. ``__setattr__`` attempts to set the value for the specified attribute, but
+    raises :py:exc:`TypeError` if the attribute is not part of the
+    fixed key set. If the attribute name has a leading underscore, these checks
+    are skipped and the value is set normally.
+
+    3. ``__repr__`` simply replaces ``FixedKeyMap`` with the name of the instantiated
+    class.
+
+    :func:`maps.namedfixedkey` provides a convenient alias for calling this metaclass.
+
+    :param str typename: Name for the new class
+    :param iterable fields: Names for the fields of the new class
+    :raises ValueError: if the type name or field names provided are not properly formatted
+    :return: Newly created subclass of :class:`maps.FixedKeyMap`
+    '''
+
     @staticmethod
     def _getattr(self, name):
+        '''Retrieves attribute by name.
+
+        :param str name: Name of the desired attribute
+        :raises AttributeError: if an attribute with the specified name cannot be found
+        :return: Desired attribute
+        '''
         try:
             return self._data[name]
         except KeyError:
@@ -14,6 +48,11 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
 
     @staticmethod
     def _setattr(self, name, value):
+        '''Sets the value for the specified attribute if the attribute name is
+        part of the fixed key set.
+
+        :raises TypeError: if the attribute name is not part of the fixed key set
+        '''
         if name.startswith('_'):
             super(type(self), self).__setattr__(name, value)
         elif name in self._data:
@@ -52,7 +91,16 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
         exec(template.format(args=args, kwargs=kwargs), namespace)
         methods['__init__'] = namespace['__init__']
 
+        cls.__doc__ = f'''{typename}: A key-value mapping with a fixed set of keys
+        whose items are accessible via bracket-notation (i.e. ``__getitem__``
+        and ``__setitem__``). Though the set of keys is immutable, the
+        corresponding values can be edited. Has fields ({cls._fields})
+
+        :param args: Position arguments in the same form as the :py:class:`dict` constructor.
+        :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
+        '''
+
         return super().__new__(cls, typename, (FixedKeyMap,), methods)
 
-    def __init__(cls, name, fields=[]):
+    def __init__(cls, typename, fields=[]):
         super().__init__(cls)
