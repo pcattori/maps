@@ -14,7 +14,7 @@ User Guide
    user/design
    user/install
    user/quickstart
-   user/advanced_usage
+   user/advanced
 
 Developer Interface
 -------------------
