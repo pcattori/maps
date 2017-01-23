@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='maps',
-    version='4.0.0',
+    version='4.1.0',
     description='Maps: flavors of Python dictionaries',
     url='https://github.com/pcattori/maps',
     author='Pedro Cattori',
@@ -10,7 +10,7 @@ setup(
     license='MIT',
     packages=['maps'],
     test_suite='tests',
-    extras_require={'test': ['codecov==2.0.5']},
+    extras_require={'dev': ['codecov==2.0.5', 'sphinx==1.5.1']},
     keywords = ['maps', 'namddict', 'frozendict', 'fixedkey', 'fixeddict'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
