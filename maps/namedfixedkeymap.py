@@ -4,10 +4,19 @@ import maps.utils as utils
 from maps.fixedkeymap import FixedKeyMap
 
 class NamedFixedKeyMapMeta(abc.ABCMeta):
-    '''Metaclass for instantiating subclasses of :class:`maps.FixedKeyMap`, each
-    defined with a specific set of fields. Similar to
-    :py:func:`collections.namedtuple`, the names of these fields can be
-    accessed via the ``_fields`` attribute of the instantiated subclass.
+    '''Returns a new :class:`maps.FixedKeyMap` subclass named ``typename``. The new
+    subclass is used to create :py:class:`dict`-like objects that have fields
+    accessible by attribute lookup as well as being indexable by name and iterable.
+    Instances of the subclass also have a helpful docstring (with typename and
+    field_names) and a helpful __repr__() method which lists the mapping contents
+    in a name=value format.
+
+    ``field_names`` can be a sequence of strings such as ``['x', 'y']``.
+
+    Any valid Python identifier may be used for a fieldname except for names
+    starting with an underscore. Valid identifiers consist of letters, digits,
+    and underscores but do not start with a digit or underscore and cannot be a
+    keyword such as class, for, return, global, pass, or raise.
 
     This metaclass injects 3 methods into the subclass:
     ``__getattr__``, ``__setattr__``, and ``__repr__``.
