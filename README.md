@@ -12,6 +12,8 @@ $ pip install maps
 ```
 ## API
 
+Check out the [Maps docs](http://maps.readthedocs.io/) for more!
+
 ### NamedDict
 
 Just a plain ol' Python `dict`, but super-charged with access via dot-notation
