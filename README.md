@@ -1,6 +1,7 @@
 [![PyPI version](https://badge.fury.io/py/maps.svg)](https://badge.fury.io/py/maps)
 [![Build Status](https://travis-ci.org/pcattori/maps.svg?branch=master)](https://travis-ci.org/pcattori/maps)
 [![Test Code Coverage](https://codecov.io/gh/pcattori/maps/branch/master/graph/badge.svg)](https://codecov.io/gh/pcattori/maps)
+[![Compatible Python Versions](https://img.shields.io/pypi/pyversions/maps.svg)](https://pypi.python.org/pypi/maps)
 [![Documentation Status](https://readthedocs.org/projects/maps/badge/?version=latest)](http://maps.readthedocs.io/en/latest/?badge=latest)
 
 # maps
