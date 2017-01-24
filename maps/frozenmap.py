@@ -40,4 +40,4 @@ class FrozenMap(collections.abc.Mapping):
         return self._hash
 
     def __repr__(self): # pragma: no cover
-        return f'{type(self).__name__}({self._data!r})'
+        return '{}({!r})'.format(type(self).__name__, self._data)

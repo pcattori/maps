@@ -53,7 +53,7 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
             return self._data[name]
         except KeyError:
             raise AttributeError(
-                f"'{type(self).__name__}' object has no attribute {name!r}")
+                "'{}' object has no attribute {!r}".format(type(self).__name__, name))
 
     @staticmethod
     def _setattr(self, name, value):
@@ -68,12 +68,12 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
             self._data[name] = value
         else:
             raise TypeError(
-                f"'{type(self).__name__}' object does not support new attribute assignment")
+                "'{}' object does not support new attribute assignment".format(type(self).__name__))
 
     @staticmethod
     def _repr(self): # pragma: no cover
-        kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
-        return f'{type(self).__name__}({kwargs})'
+        kwargs = ', '.join('{}={!r}'.format(key, value) for key, value in self.items())
+        return '{}({})'.format(type(self).__name__, kwargs)
 
     def __new__(cls, typename, fields=[]):
         fields = tuple(fields)
@@ -95,19 +95,19 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
             '    super(type(self), self).__init__()',
             '    self._data = collections.OrderedDict({kwargs})'])
         args = ', '.join(fields)
-        kwargs = ', '.join([f'{i}={i}' for i in fields])
+        kwargs = ', '.join(['{0}={0}'.format(i) for i in fields])
         namespace = {'collections': collections}
         exec(template.format(args=args, kwargs=kwargs), namespace)
         methods['__init__'] = namespace['__init__']
 
-        cls.__doc__ = f'''{typename}: A key-value mapping with a fixed set of keys
+        cls.__doc__ = '''{typename}: A key-value mapping with a fixed set of keys
         whose items are accessible via bracket-notation (i.e. ``__getitem__``
         and ``__setitem__``). Though the set of keys is immutable, the
-        corresponding values can be edited. Has fields ({cls._fields})
+        corresponding values can be edited. Has fields ({fields})
 
         :param args: Position arguments in the same form as the :py:class:`dict` constructor.
         :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
-        '''
+        '''.format(typename=typename, fields=cls._fields)
 
         return super().__new__(cls, typename, (FixedKeyMap,), methods)
 

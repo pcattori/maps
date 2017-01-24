@@ -52,7 +52,8 @@ class NamedFrozenMapMeta(abc.ABCMeta):
         try:
             return self._data[name]
         except KeyError:
-            raise AttributeError(f"'{type(self).__name__}' object has no attribute {name!r}")
+            raise AttributeError(
+                "'{}' object has no attribute {!r}".format(type(self).__name__, name))
 
     @staticmethod
     def _setattr(self, name, value):
@@ -62,13 +63,13 @@ class NamedFrozenMapMeta(abc.ABCMeta):
         '''
         if not name.startswith('_'):
             raise TypeError(
-                f"'{type(self).__name__}' object does not support attribute assignment")
+                "'{}' object does not support attribute assignment".format(type(self).__name__))
         super(type(self), self).__setattr__(name, value)
 
     @staticmethod
     def _repr(self): # pragma: no cover
-        kwargs = ', '.join(f'{key}={value!r}' for key, value in self.items())
-        return f'{type(self).__name__}({kwargs})'
+        kwargs = ', '.join('{}={!r}'.format(key, value) for key, value in self.items())
+        return '{}({})'.format(type(self).__name__, kwargs)
 
     def __new__(cls, typename, fields=[]):
         fields = tuple(fields)
@@ -90,18 +91,18 @@ class NamedFrozenMapMeta(abc.ABCMeta):
             '    super(type(self), self).__init__()',
             '    self._data = collections.OrderedDict({kwargs})'])
         args = ', '.join(fields)
-        kwargs = ', '.join([f'{i}={i}' for i in fields])
+        kwargs = ', '.join(['{0}={0}'.format(i) for i in fields])
         namespace = {'collections': collections}
         exec(template.format(args=args, kwargs=kwargs), namespace)
         methods['__init__'] = namespace['__init__']
 
-        cls.__doc__ = f'''{typename}: An immutable, hashable key-value mapping
+        cls.__doc__ = '''{typename}: An immutable, hashable key-value mapping
         accessible via bracket-notation (i.e. ``__getitem__``). Has fields
-        ({cls._fields}).
+        ({fields}).
 
         :param args: Position arguments in the same form as the :py:class:`dict` constructor.
         :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
-        '''
+        '''.format(typename=typename, fields=cls._fields)
 
         return super().__new__(cls, typename, (FrozenMap,), methods)
 
