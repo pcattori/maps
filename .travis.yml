@@ -1,5 +1,10 @@
 language: python
-python: 3.6
+python:
+  - 2.7
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
 install: pip install .[dev]
 script: coverage run --source maps setup.py test
 after_success: codecov
