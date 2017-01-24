@@ -5,8 +5,9 @@ python:
   - 3.4
   - 3.5
   - 3.6
-install:
+before_install:
   - pip install -U pip setuptools
-  - pip install .[dev]
+install:
+  - pip install -e .[dev]
 script: coverage run --source maps setup.py test
 after_success: codecov
