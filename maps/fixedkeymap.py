@@ -1,6 +1,9 @@
-import collections.abc
+try:
+    import collections.abc as collections_abc
+except ImportError:
+    import collections as collections_abc
 
-class FixedKeyMap(collections.abc.MutableMapping):
+class FixedKeyMap(collections_abc.MutableMapping):
     '''A key-value mapping with a fixed set of keys whose items are accessible
     via bracket-notation (i.e. ``__getitem__`` and ``__setitem__``). Though the
     set of keys is immutable, the corresponding values can be edited.

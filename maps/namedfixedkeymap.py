@@ -84,7 +84,17 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
 
         cls._fields = fields
 
+        docstring = '''{typename}: A key-value mapping with a fixed set of keys
+        whose items are accessible via bracket-notation (i.e. ``__getitem__``
+        and ``__setitem__``). Though the set of keys is immutable, the
+        corresponding values can be edited. Has fields ({fields})
+
+        :param args: Position arguments in the same form as the :py:class:`dict` constructor.
+        :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
+        '''.format(typename=typename, fields=cls._fields)
+
         methods = {
+            '__doc__': docstring,
             '__getattr__': NamedFixedKeyMapMeta._getattr,
             '__repr__': NamedFixedKeyMapMeta._repr,
             '__setattr__': NamedFixedKeyMapMeta._setattr}
@@ -100,16 +110,7 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
         exec(template.format(args=args, kwargs=kwargs), namespace)
         methods['__init__'] = namespace['__init__']
 
-        cls.__doc__ = '''{typename}: A key-value mapping with a fixed set of keys
-        whose items are accessible via bracket-notation (i.e. ``__getitem__``
-        and ``__setitem__``). Though the set of keys is immutable, the
-        corresponding values can be edited. Has fields ({fields})
-
-        :param args: Position arguments in the same form as the :py:class:`dict` constructor.
-        :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
-        '''.format(typename=typename, fields=cls._fields)
-
-        return super().__new__(cls, typename, (FixedKeyMap,), methods)
+        return type.__new__(cls, typename, (FixedKeyMap,), methods)
 
     def __init__(cls, typename, fields=[]):
-        super().__init__(cls)
+        super(type(cls), cls).__init__(cls)

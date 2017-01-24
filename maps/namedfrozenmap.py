@@ -1,6 +1,5 @@
 import abc
 import collections
-import collections.abc
 import maps.utils as utils
 from maps.frozenmap import FrozenMap
 
@@ -80,7 +79,16 @@ class NamedFrozenMapMeta(abc.ABCMeta):
 
         cls._fields = fields
 
+        docstring = '''{typename}: An immutable, hashable key-value mapping
+        accessible via bracket-notation (i.e. ``__getitem__``). Has fields
+        ({fields}).
+
+        :param args: Position arguments in the same form as the :py:class:`dict` constructor.
+        :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
+        '''.format(typename=typename, fields=cls._fields)
+
         methods = {
+            '__doc__': docstring,
             '__getattr__': NamedFrozenMapMeta._getattr,
             '__repr__': NamedFrozenMapMeta._repr,
             '__setattr__': NamedFrozenMapMeta._setattr}
@@ -96,15 +104,7 @@ class NamedFrozenMapMeta(abc.ABCMeta):
         exec(template.format(args=args, kwargs=kwargs), namespace)
         methods['__init__'] = namespace['__init__']
 
-        cls.__doc__ = '''{typename}: An immutable, hashable key-value mapping
-        accessible via bracket-notation (i.e. ``__getitem__``). Has fields
-        ({fields}).
-
-        :param args: Position arguments in the same form as the :py:class:`dict` constructor.
-        :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
-        '''.format(typename=typename, fields=cls._fields)
-
-        return super().__new__(cls, typename, (FrozenMap,), methods)
+        return type.__new__(cls, typename, (FrozenMap,), methods)
 
     def __init__(cls, typename, fields=[]):
-        super().__init__(cls)
+        super(type(cls), cls).__init__(cls)
