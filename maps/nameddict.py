@@ -43,4 +43,4 @@ class NamedDict(dict):
         self[name] = value
 
     def __repr__(self): # pragma: no cover
-        return f'{type(self).__name__}({super().__repr__()})'
+        return '{}({})'.format(type(self).__name__, super(type(self), self).__repr__())

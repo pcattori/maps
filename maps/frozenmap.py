@@ -1,6 +1,9 @@
-import collections.abc
+try:
+    import collections.abc as collections_abc
+except ImportError:
+    import collections as collections_abc
 
-class FrozenMap(collections.abc.Mapping):
+class FrozenMap(collections_abc.Mapping):
     '''An immutable, hashable key-value mapping accessible via bracket-notation
     (i.e. ``__getitem__``).
 
@@ -40,4 +43,4 @@ class FrozenMap(collections.abc.Mapping):
         return self._hash
 
     def __repr__(self): # pragma: no cover
-        return f'{type(self).__name__}({self._data!r})'
+        return '{}({!r})'.format(type(self).__name__, self._data)

@@ -113,13 +113,7 @@ class NamedFrozenMapTest(unittest.TestCase):
     def test_iter(self):
         RGB = NamedFrozenMapMeta('RGB', ['red', 'green', 'blue'])
         rgb = RGB(red='rouge', green='forest', blue='azul')
-        it = iter(rgb)
-        self.assertEqual(next(it), 'red')
-        self.assertEqual(next(it), 'green')
-        self.assertEqual(next(it), 'blue')
-        with self.assertRaises(StopIteration) as context:
-            next(it)
-        self.assertEqual(str(context.exception), '')
+        self.assertEqual(frozenset(iter(rgb)), frozenset(['red', 'green', 'blue']))
 
     def test_class_fields(self):
         RGB = NamedFrozenMapMeta('RGB', ['red', 'green', 'blue'])
