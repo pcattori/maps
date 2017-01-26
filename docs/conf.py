@@ -44,6 +44,7 @@ html_theme = 'alabaster'
 
 html_static_path = ['_static']
 html_logo = '_static/mapache.png'
+html_sidebars = { '**': ['localtoc.html', 'relations.html', 'searchbox.html'], }
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/3': None}

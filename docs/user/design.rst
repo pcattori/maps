@@ -37,53 +37,112 @@ But Python is missing:
 
 3. Access-by-name / dot-notation via ``__getattr__`` and ``__setattr__`` (ala :py:func:`collections.namedtuple`) for: (3.a) immutable, (3.b) fixed-key, and (3.c) mutable mappings
 
-+-------------------------+--------+-----------+------------------+
-|                         | Frozen | Fixed-Key | Mutable          |
-+-------------------------+--------+-----------+------------------+
-| Bracket-notation access | ?      | ?         | :py:class:`dict` |
-+-------------------------+--------+-----------+------------------+
-| Dot-notation access     | ?      | ?         | ?                |
-+-------------------------+--------+-----------+------------------+
++------------------------+--------+-----------+------------------+
+|                        | Frozen | Fixed-Key | Mutable          |
++------------------------+--------+-----------+------------------+
+| Bracket-only access    | ?      | ?         | :py:class:`dict` |
++------------------------+--------+-----------+------------------+
+| Dot and bracket access | ?      | ?         | ?                |
++------------------------+--------+-----------+------------------+
 
 ----
 
 Maps fills these gaps:
 
-1. :class:`maps.FrozenMap`
++------------------------+--------------------------+----------------------------+------------------------+
+|                        | Frozen                   | Fixed-Key                  | Mutable                |
++------------------------+--------------------------+----------------------------+------------------------+
+| Bracket-only access    | :class:`maps.FrozenMap`  | :class:`maps.FixedKeyMap`  | :py:class:`dict`       |
++------------------------+--------------------------+----------------------------+------------------------+
+| Dot and bracket access | :func:`maps.namedfrozen` | :func:`maps.namedfixedkey` | :func:`maps.NamedDict` |
++------------------------+--------------------------+----------------------------+------------------------+
 
-2. :class:`maps.FixedKeyMap`
+Named Maps
+----------
 
-3. Access-by-name / dot-notation:
+From `darkf <https://github.com/darkf>`_'s `"Problems I have with Python" <http://darkf.github.io/posts/problems-i-have-with-python.html>`_
 
-   a. :func:`maps.namedfrozen`
+   Python classes are useful, but it is a ton of boilerplate to write variant classes such as::
 
-   b. :func:`maps.namedfixedkey`
+      class Node: pass
 
-   c. :class:`maps.NamedDict`
+      class FooNode(Node):
+          def __init__(self, x, y):
+              self.x = x
+              self.y = y
 
-+-------------------------+--------------------------+----------------------------+------------------------+
-|                         | Frozen                   | Fixed-Key                  | Mutable                |
-+-------------------------+--------------------------+----------------------------+------------------------+
-| Bracket-notation access | :class:`maps.FrozenMap`  | :class:`maps.FixedKeyMap`  | :py:class:`dict`       |
-+-------------------------+--------------------------+----------------------------+------------------------+
-| Dot-notation access     | :func:`maps.namedfrozen` | :func:`maps.namedfixedkey` | :func:`maps.NamedDict` |
-+-------------------------+--------------------------+----------------------------+------------------------+
+      class BarNode(Node): pass
 
-Named Maps: class vs function
------------------------------
+   :py:class:`collections.namedtuple` would better solve this, but unfortunately they're immutable (like normal Python tuples) and thus make bad "bag of mutable data" objects.
 
-Just like :py:func:`collections.namedtuple`, :func:`maps.namedfrozen` and
-:func:`maps.namedfixedkey` are **functions** that help you to dynamically
-instantiate new classes with a fixed set of fields.
+With Named Maps its easy to define "bag of data" classes and objects with specific
+levels of immutability.
+
+----
+
+Replace :py:class:`collections.namedtuple` with :func:`maps.namedfrozen` if you
+want access by string name::
+
+   >>> import collections
+   >>> Point = collections.namedtuple('Point', ['x', 'y'])
+   >>> p = Point(1, 2)
+   >>> p.x
+   1
+   >>> p[1] # access by numerical index
 
    >>> import maps
-   >>> RGB = maps.namedfrozen('RGB', ['red', 'green', 'blue']) # create RGB class; all RGB instances are guaranteed to have only `red`, `green`, and `blue` fields
-   >>> cerulean_rgb = RGB(0, 123, 167) # make an instance of `RGB`
+   >>> Point = maps.namedfrozen('Point', ['x', 'y'])
+   >>> p = Point(1, 2)
+   >>> p.x
+   1
+   >>> p['y'] # access by string name
+
+This is especially, for example, if you are reading JSON data, where attribute
+names will be represented as strings.
+
+----
+
+Replace :py:class:`collections.namedtuple` with :func:`maps.namedfixedkey` if you
+want access by string name and you want to edit the values for the fixed set of keys::
+
+   >>> import collections
+   >>> Point = collections.namedtuple('Point', ['x', 'y'])
+   >>> p = Point(1, 2)
+   >>> p = p._replace('x', p.x * -1) # not beautiful nor easy to read
 
 
    >>> import maps
-   >>> CMYK = maps.namedfixedkey('CMYK', ['cyan', 'magenta', 'yellow', 'black']) # create CMYK class; all CMYK instances are guaranteed to have only `cyan`, `magenta`, `yellow`, and `black` fields
-   >>> cerulean_cmyk = CMYK(100, 26, 0, 35) # make an instance of `CMYK`
+   >>> Point = maps.namedfrozen('Point', ['x', 'y'])
+   >>> p = Point(1, 2)
+   >>> p.x *= -1 # beautiful and legible
+
+----
+
+Replace :py:class:`collections.namedtuple` with :class:`maps.NamedDict` if you
+want `dict` under the hood instead of `tuple`::
+
+   >>> import collections
+   >>> Point = collections.namedtuple('Point', ['x', 'y'])
+   >>> p = Point(1, 2)
+   >>> Point3D = collections.namedtuple('Point3D', Point._fields + ('z',))
+   >>> p = Point3D(p.x, p.y, 3)
+   >>> p[2]
+   3
+
+   >>> import maps
+   >>> p = maps.NamedDict(x=1, y=2)
+   >>> p.z = 3
+   >>> p['z']
+   3
+
+You may have noticed that :func:`maps.namedfrozen` and :func:`maps.namedfixedkey`
+are both functions while :class:`maps.NamedDict` is a class. You might have also
+noticed that :class:`maps.NamedDict` skipped creating a ``Point`` class altogether.
+
+If you would like to know why this is the case, keep reading...
+
+class vs function
+^^^^^^^^^^^^^^^^^
 
 Encapsulating knowledge of the fields into a class makes code easier to reason
 about as it makes guarantees as to what fields will be available. So when

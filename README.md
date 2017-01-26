@@ -6,6 +6,13 @@
 
 # maps
 
+Python's missing mappings
+
+|                        | Frozen             | Fixed-key            | Mutable          |
+| ---                    | ---                | ---                  | ---              |
+| bracket access         | `maps.FrozenMap`   | `maps.FixedKeyMap`   | `dict`           |
+| dot and bracket access | `maps.namedfrozen` | `maps.namedfixedkey` | `maps.NamedDict` |
+
 ## Install
 
 ```sh
@@ -13,7 +20,7 @@ $ pip install maps
 ```
 ## API
 
-Check out the [Maps docs](http://maps.readthedocs.io/) for more!
+Check out the [official Maps docs](http://maps.readthedocs.io/) for more!
 
 ### NamedDict
 
@@ -33,10 +40,6 @@ NamedDict({'a': 1, 'b': 'two'})
 >>> d.c = 3
 >>> d
 NamedDict({'a': 1, 'b': 'two', 'c': 3})
->>> d.d
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-KeyError: 'd'
 ```
 
 ### namedfrozen
@@ -57,31 +60,6 @@ RGB(red='rouge', green='forest', blue='azul')
 'rouge'
 >>> rgb.green # access via dot-notation
 'forest'
-
->>> rgb['grey']
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-KeyError: 'grey'
-
->>> rgb['grey'] = 'pewter'
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: 'RGB' object does not support item assignment
-
->>> rgb.gray
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-AttributeError: 'RGB' object has no attribute 'gray'
-
->>> rgb.gray = 'pewter'
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: 'RGB' object does not support attribute assignment
-
->>> rgb.blue = 'topaz' # NamedMaps are immutable
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: 'RGB' object does not support attribute assignment
 ```
 
 ### namedfixedkey
@@ -98,24 +76,4 @@ CMYK(255, 30, 25, 55)
 >>> cmyk.black += 45 # overwrite existing items
 >>> print(cmyk)
 CMYK(255, 30, 25, 100)
-
->>> cmyk['grey']
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-KeyError: 'grey'
-
->>> cmyk['grey'] = 'pewter' # cannot add new keys
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: 'CMYK' object does not support new item assignment
-
->>> cmyk.gray
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-AttributeError: 'CMYK' object has no attribute 'gray'
-
->>> cmyk.gray = 'pewter' # cannot add new keys
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: 'CMYK' object does not support new attribute assignment
 ```
