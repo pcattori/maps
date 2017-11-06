@@ -10,6 +10,13 @@ class NamedFixedKeyMapMetaTest(unittest.TestCase):
         self.assertTrue(hasattr(rgb, 'green'))
         self.assertTrue(hasattr(rgb, 'blue'))
 
+    def test_special_names(self):
+        for special_name in ['type', 'self', 'collections']:
+            TestClass = NamedFixedKeyMapMeta(special_name.title(), [special_name])
+            test_obj = TestClass({'special_name': 'abc'})
+            self.assertIsInstance(test_obj, TestClass)
+            self.assertTrue(hasattr(test_obj, special_name))
+
     def test_non_alphanumeric_names(self):
         with self.assertRaises(ValueError) as context:
             RGB = NamedFixedKeyMapMeta('RGB', ['r_e_d', 'gr33n', '&lue'])
