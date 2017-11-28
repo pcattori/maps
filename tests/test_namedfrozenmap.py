@@ -11,11 +11,10 @@ class NamedFrozenMapTest(unittest.TestCase):
         self.assertTrue(hasattr(rgb, 'blue'))
 
     def test_special_names(self):
-        for special_name in ['type', 'self', 'collections']:
+        for special_name in ['type', 'self', 'collections', 'super']:
             TestClass = NamedFrozenMapMeta(special_name.title(), [special_name])
-            test_obj = TestClass({'special_name': 'abc'})
-            self.assertIsInstance(test_obj, TestClass)
-            self.assertTrue(hasattr(test_obj, special_name))
+            test_obj = TestClass(1)
+            self.assertEqual(test_obj[special_name], 1)
 
     def test_non_alphanumeric_names(self):
         with self.assertRaises(ValueError) as context:
