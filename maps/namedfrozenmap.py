@@ -36,7 +36,8 @@ class NamedFrozenMapMeta(abc.ABCMeta):
 
     :param str typename: Name for the new class
     :param iterable fields: Names for the fields of the new class
-    :raises ValueError: if the type name or field names provided are not properly formatted
+    :param mapping defaults: Maps default values to fields of the new class
+    :raises ValueError: if the type name or field names or defaults provided are not properly formatted
     :return: Newly created subclass of :class:`maps.FrozenMap`
     '''
 
