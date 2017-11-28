@@ -24,6 +24,10 @@ def _validate_fields(fields):
         seen_names.add(name)
 
 def _validate_defaults(fields, defaults):
+    for arg in defaults:
+        if arg not in fields:
+            raise ValueError('Default argument does not correspond to any field: {!r}'.format(arg))
+        
     for i, field in enumerate(fields):
         if field in defaults:
             for fieldAfterDefault in fields[i:]:
