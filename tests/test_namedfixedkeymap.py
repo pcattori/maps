@@ -130,5 +130,13 @@ class NamedFixedKeyMapMetaTest(unittest.TestCase):
             str(context.exception),
             "non-default argument 'blue' follows default argument 'green'")
 
+    def test_defaults_correspond_to_fields(self):
+        with self.assertRaises(ValueError) as context:
+            RGB = NamedFixedKeyMapMeta(
+                'RGB', ['red', 'green', 'blue'], defaults=dict(brown=1))
+        self.assertEqual(
+            str(context.exception),
+            "Default argument does not correspond to any field: 'brown'")
+
 if __name__ == '__main__':
     unittest.main()

@@ -130,7 +130,17 @@ class NamedFrozenMapTest(unittest.TestCase):
             RGB = NamedFrozenMapMeta(
                 'RGB', ['red', 'green', 'blue'], defaults=dict(green=1))
         self.assertEqual(
-            str(context.exception), "non-default argument 'blue' follows default argument 'green'")
+            str(context.exception),
+            "non-default argument 'blue' follows default argument 'green'")
+
+    def test_defaults_correspond_to_fields(self):
+        with self.assertRaises(ValueError) as context:
+            RGB = NamedFrozenMapMeta(
+                'RGB', ['red', 'green', 'blue'], defaults=dict(brown=1))
+        self.assertEqual(
+            str(context.exception),
+            "Default argument does not correspond to any field: 'brown'")
+
 
 if __name__ == '__main__':
     unittest.main()
