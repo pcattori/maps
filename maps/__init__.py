@@ -4,7 +4,7 @@ from maps.nameddict import NamedDict
 from maps.namedfixedkeymap import NamedFixedKeyMapMeta
 from maps.namedfrozenmap import NamedFrozenMapMeta
 
-def namedfrozen(typename, fields):
+def namedfrozen(typename, fields, defaults={}):
     '''Creates a new class that inherits from :class:`maps.FrozenMap` that has the
     specified fields as keys. Fields are accessible via bracket-notation
     (i.e. ``__getitem__``) as well as dot-notation (i.e. ``__getattr__``).
@@ -12,23 +12,24 @@ def namedfrozen(typename, fields):
 
     :param str typename: Name of the new Map class
     :param iterable fields: Names of the fields
-    :raises ValueError: if the type name or field names provided are not properly formatted
+    :param mapping defaults: Maps default values to fields
+    :raises ValueError: if the type name or field names or defaults provided are not properly formatted
     :return: The newly created class
     :rtype: class
 
     Usage::
 
        >>> import maps
-       >>> RGB = maps.namedfrozen('RGB', ['red', 'green', 'blue'])
-       >>> coral = RGB(255, 127, 80)
+       >>> RGB = maps.namedfrozen('RGB', ['red', 'green', 'blue'], defaults={'green': 127, 'blue': 80})
+       >>> coral = RGB(255)
        >>> coral['red']
        255
        >>> coral.green
        127
     '''
-    return NamedFrozenMapMeta(typename, fields)
+    return NamedFrozenMapMeta(typename, fields, defaults)
 
-def namedfixedkey(typename, fields):
+def namedfixedkey(typename, fields, defaults={}):
     '''Creates a new class that inherits from :class:`maps.FixedKeyMap` that has the
     speciefied fields as keys. Fields are accessible via bracket-notation
     (i.e. ``__getitem__``) as well as dot-notation (i.e. ``__getattr__``).
@@ -37,15 +38,16 @@ def namedfixedkey(typename, fields):
 
     :param str typename: Name of the new Map class
     :param iterable fields: Names of the fields
-    :raises ValueError: if the type name or field names provided are not properly formatted
+    :param mapping defaults: Maps default values to fields
+    :raises ValueError: if the type name or field names or defaults provided are not properly formatted
     :return: The newly created class
     :rtype: class
 
     Usage::
 
        >>> import maps
-       >>> Person = maps.namedfixedkey('Person', ['name', 'gender', 'age'])
-       >>> bob = Person('bob', 'male', 40)
+       >>> Person = maps.namedfixedkey('Person', ['name', 'gender', 'age'], defaults={'age': 40})
+       >>> bob = Person('bob', 'male')
        >>> bob['name']
        'bob'
        >>> bob.gender
@@ -54,4 +56,4 @@ def namedfixedkey(typename, fields):
        >>> bob.age
        41
     '''
-    return NamedFixedKeyMapMeta(typename, fields)
+    return NamedFixedKeyMapMeta(typename, fields, defaults)

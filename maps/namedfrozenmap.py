@@ -36,7 +36,8 @@ class NamedFrozenMapMeta(abc.ABCMeta):
 
     :param str typename: Name for the new class
     :param iterable fields: Names for the fields of the new class
-    :raises ValueError: if the type name or field names provided are not properly formatted
+    :param mapping defaults: Maps default values to fields of the new class
+    :raises ValueError: if the type name or field names or defaults provided are not properly formatted
     :return: Newly created subclass of :class:`maps.FrozenMap`
     '''
 
@@ -70,12 +71,13 @@ class NamedFrozenMapMeta(abc.ABCMeta):
         kwargs = ', '.join('{}={!r}'.format(key, value) for key, value in self.items())
         return '{}({})'.format(type(self).__name__, kwargs)
 
-    def __new__(cls, typename, fields=[]):
+    def __new__(cls, typename, fields=[], defaults={}):
         fields = tuple(fields)
         # validate names
         for name in (typename,) + fields:
             utils._validate_name(name)
         utils._validate_fields(fields)
+        utils._validate_defaults(fields, defaults)
 
         cls._fields = fields
 
@@ -98,7 +100,10 @@ class NamedFrozenMapMeta(abc.ABCMeta):
             'def __init__(self, {args}):',
             '    super(type(self), self).__init__()',
             '    self._data = collections.OrderedDict({kwargs})'])
-        args = ', '.join(fields)
+        args = ', '.join(
+            '{arg}={default}'.format(arg=field, default=defaults[field])
+            if field in defaults else field
+            for field in fields)
         kwargs = ', '.join(['{0}={0}'.format(i) for i in fields])
         namespace = {'collections': collections}
         exec(template.format(args=args, kwargs=kwargs), namespace)
@@ -106,5 +111,5 @@ class NamedFrozenMapMeta(abc.ABCMeta):
 
         return type.__new__(cls, typename, (FrozenMap,), methods)
 
-    def __init__(cls, typename, fields=[]):
+    def __init__(cls, typename, fields=[], defaults={}):
         super(type(cls), cls).__init__(cls)
