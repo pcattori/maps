@@ -4,7 +4,7 @@ from maps.nameddict import NamedDict
 from maps.namedfixedkeymap import NamedFixedKeyMapMeta
 from maps.namedfrozenmap import NamedFrozenMapMeta
 
-def namedfrozen(typename, fields):
+def namedfrozen(typename, fields, defaults={}):
     '''Creates a new class that inherits from :class:`maps.FrozenMap` that has the
     specified fields as keys. Fields are accessible via bracket-notation
     (i.e. ``__getitem__``) as well as dot-notation (i.e. ``__getattr__``).
@@ -26,9 +26,9 @@ def namedfrozen(typename, fields):
        >>> coral.green
        127
     '''
-    return NamedFrozenMapMeta(typename, fields)
+    return NamedFrozenMapMeta(typename, fields, defaults)
 
-def namedfixedkey(typename, fields):
+def namedfixedkey(typename, fields, defaults={}):
     '''Creates a new class that inherits from :class:`maps.FixedKeyMap` that has the
     speciefied fields as keys. Fields are accessible via bracket-notation
     (i.e. ``__getitem__``) as well as dot-notation (i.e. ``__getattr__``).
@@ -54,4 +54,4 @@ def namedfixedkey(typename, fields):
        >>> bob.age
        41
     '''
-    return NamedFixedKeyMapMeta(typename, fields)
+    return NamedFixedKeyMapMeta(typename, fields, defaults)
