@@ -119,5 +119,18 @@ class NamedFrozenMapTest(unittest.TestCase):
         RGB = NamedFrozenMapMeta('RGB', ['red', 'green', 'blue'])
         self.assertEqual(RGB._fields, ('red', 'green', 'blue'))
 
+    def test_defaults(self):
+        RGB = NamedFrozenMapMeta(
+            'RGB', ['red', 'green', 'blue'], defaults=dict(green=1, blue=2))
+        rgb = RGB(red=100, green=7)
+        self.assertEqual(rgb._data, dict(red=100, green=7, blue=2))
+
+    def test_defaults_ordering(self):
+        with self.assertRaises(ValueError) as context:
+            RGB = NamedFrozenMapMeta(
+                'RGB', ['red', 'green', 'blue'], defaults=dict(green=1))
+        self.assertEqual(
+            str(context.exception), "non-default argument 'blue' follows default argument 'green'")
+
 if __name__ == '__main__':
     unittest.main()
