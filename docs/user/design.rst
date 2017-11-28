@@ -97,7 +97,14 @@ want access by string name::
    1
    >>> p['y'] # access by string name
 
-This is especially, for example, if you are reading JSON data, where attribute
+:func:`maps.namedfrozen` also supports default values::
+
+   >>> import maps
+   >>> Point = maps.namedfrozen('Point', ['x', 'y'], defaults={'y': 0})
+   >>> p = Point(1)
+   >>> assert(p == Point(1, 0))
+
+This is especially useful, for example, if you are reading JSON data, where attribute
 names will be represented as strings.
 
 ----
@@ -115,6 +122,13 @@ want access by string name and you want to edit the values for the fixed set of 
    >>> Point = maps.namedfrozen('Point', ['x', 'y'])
    >>> p = Point(1, 2)
    >>> p.x *= -1 # beautiful and legible
+
+:func:`maps.namedfixedkey` also supports default values::
+
+   >>> import maps
+   >>> Point = maps.namedfixedkey('Point', ['x', 'y'], defaults={'y': 0})
+   >>> p = Point(1)
+   >>> assert(p == Point(1, 0))
 
 ----
 
