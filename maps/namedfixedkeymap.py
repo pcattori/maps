@@ -76,11 +76,6 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
         kwargs = ', '.join('{}={!r}'.format(key, value) for key, value in self.items())
         return '{}({})'.format(type(self).__name__, kwargs)
 
-    @staticmethod
-    def _recurse(cls, obj, list_fn=lambda x: x, object_fn=lambda x: x):
-        # TODO docstring
-        return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
-
     def __new__(cls, typename, fields=[], defaults={}):
         fields = tuple(fields)
         # validate names
@@ -104,8 +99,7 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
             '__doc__': docstring,
             '__getattr__': NamedFixedKeyMapMeta._getattr,
             '__repr__': NamedFixedKeyMapMeta._repr,
-            '__setattr__': NamedFixedKeyMapMeta._setattr,
-            'recurse': classmethod(NamedFixedKeyMapMeta._recurse)}
+            '__setattr__': NamedFixedKeyMapMeta._setattr}
 
         # handle custom __init__
         template = '\n'.join([
