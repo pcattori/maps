@@ -24,6 +24,10 @@ class NamedDict(dict):
        {'a': 1, 'b': 2, 'c': 3}
     '''
 
+    @classmethod
+    def recurse(cls, obj, list_fn=lambda x: x, object_fn=lambda x: x):
+        return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
+
     def __getattr__(self, name):
         '''Retrieves the corresponding value for the specified key via
         dot-notation.

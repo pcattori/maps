@@ -2,6 +2,7 @@ try:
     import collections.abc as collections_abc
 except ImportError:
     import collections as collections_abc
+import maps.utils as utils
 
 class FrozenMap(collections_abc.Mapping):
     '''An immutable, hashable key-value mapping accessible via bracket-notation
@@ -23,6 +24,10 @@ class FrozenMap(collections_abc.Mapping):
        >>> hash(fm)
        3212389899479848432
     '''
+
+    @classmethod
+    def recurse(cls, obj, list_fn=tuple, object_fn=lambda x: x):
+        return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
 
     def __init__(self, *args, **kwargs):
         self._data = dict(*args, **kwargs)

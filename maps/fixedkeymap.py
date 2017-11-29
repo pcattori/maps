@@ -2,6 +2,7 @@ try:
     import collections.abc as collections_abc
 except ImportError:
     import collections as collections_abc
+import maps.utils as utils
 
 class FixedKeyMap(collections_abc.MutableMapping):
     '''A key-value mapping with a fixed set of keys whose items are accessible
@@ -26,6 +27,10 @@ class FixedKeyMap(collections_abc.MutableMapping):
        2
     '''
 
+    @classmethod
+    def recurse(cls, obj, list_fn=lambda x: x, object_fn=lambda x: x):
+        return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
+
     def __init__(self, *args, **kwargs):
         self._data = dict(*args, **kwargs)
 
@@ -47,4 +52,3 @@ class FixedKeyMap(collections_abc.MutableMapping):
             raise TypeError(
                 "'{}' object does not support new item assignment".format(type(self).__name__))
         self._data[name] = value
-

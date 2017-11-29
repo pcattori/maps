@@ -1,3 +1,4 @@
+import collections
 import keyword
 
 def _validate_name(name):
@@ -27,9 +28,19 @@ def _validate_defaults(fields, defaults):
     for arg in defaults:
         if arg not in fields:
             raise ValueError('Default argument does not correspond to any field: {!r}'.format(arg))
-        
+
     for i, field in enumerate(fields):
         if field in defaults:
             for fieldAfterDefault in fields[i:]:
                 if fieldAfterDefault not in defaults:
                     raise ValueError("non-default argument '{}' follows default argument '{}'".format(fieldAfterDefault, field))
+
+def _recurse(obj, map_fn=lambda x: x, list_fn=lambda x: x, object_fn=lambda x: x):
+    kwargs = dict(map_fn=map_fn, list_fn=list_fn, object_fn=object_fn)
+    if isinstance(obj, (bool, int, float, complex, str)):
+        return obj
+    if isinstance(obj, collections.Mapping):
+        return map_fn(**{k: _recurse(v, **kwargs) for k,v in obj.items()})
+    if isinstance(obj, (collections.Sequence, collections.Set)):
+        return list_fn([_recurse(v, **kwargs) for v in obj])
+    return object_fn(obj)

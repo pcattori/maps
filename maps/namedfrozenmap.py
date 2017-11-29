@@ -71,6 +71,10 @@ class NamedFrozenMapMeta(abc.ABCMeta):
         kwargs = ', '.join('{}={!r}'.format(key, value) for key, value in self.items())
         return '{}({})'.format(type(self).__name__, kwargs)
 
+    @staticmethod
+    def _recurse(cls, obj, list_fn=tuple, object_fn=lambda x: x):
+        return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
+
     def __new__(cls, typename, fields=[], defaults={}):
         fields = tuple(fields)
         # validate names
@@ -93,7 +97,8 @@ class NamedFrozenMapMeta(abc.ABCMeta):
             '__doc__': docstring,
             '__getattr__': NamedFrozenMapMeta._getattr,
             '__repr__': NamedFrozenMapMeta._repr,
-            '__setattr__': NamedFrozenMapMeta._setattr}
+            '__setattr__': NamedFrozenMapMeta._setattr,
+            'recurse': classmethod(NamedFrozenMapMeta._recurse)}
 
         # handle custom __init__
         template = '\n'.join([
