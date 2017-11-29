@@ -25,8 +25,21 @@ class NamedDict(dict):
     '''
 
     @classmethod
-    def recurse(cls, obj, list_fn=lambda x: x, object_fn=lambda x: x):
-        # TODO docstring
+    def recurse(cls, obj, list_fn=None, object_fn=None):
+        '''Recursively create :class:`NamedDict` s when :py:class:`collections.Mapping`
+        are encountered.
+
+        :param obj: Object to be recursively converted.
+        :param func list_fn: Conversion function applied to any :py:class:`collections.Sequence` s and :py:class:`collections.Set` s encountered. Defaults to the identity function.
+        :param func object_fn: Conversion function applied to all other objects encountered. Defaults to the identity function.
+
+        Usage::
+
+           >>> import maps
+           >>> fm = maps.NamedDict.recurse({'a': 1, 'b': [2, {'c': 3}]})
+           >>> fm.b[1]
+           FrozenMap(c=3)
+        '''
         return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
 
     def __getattr__(self, name):

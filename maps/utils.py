@@ -35,7 +35,14 @@ def _validate_defaults(fields, defaults):
                 if fieldAfterDefault not in defaults:
                     raise ValueError("non-default argument '{}' follows default argument '{}'".format(fieldAfterDefault, field))
 
-def _recurse(obj, map_fn=lambda x: x, list_fn=lambda x: x, object_fn=lambda x: x):
+def _recurse(obj, map_fn=None, list_fn=None, object_fn=None):
+    if map_fn is None:
+        map_fn = lambda x: x
+    if list_fn is None:
+        list_fn = lambda x: x
+    if object_fn is None:
+        object_fn = lambda x: x
+
     if isinstance(obj, (bool, int, float, complex, str)):
         return obj
 

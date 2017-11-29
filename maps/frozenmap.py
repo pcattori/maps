@@ -26,8 +26,21 @@ class FrozenMap(collections_abc.Mapping):
     '''
 
     @classmethod
-    def recurse(cls, obj, list_fn=tuple, object_fn=lambda x: x):
-        # TODO docstring
+    def recurse(cls, obj, list_fn=tuple, object_fn=None):
+        '''Recursively create :class:`FrozenMap` s when :py:class:`collections.Mapping`
+        are encountered.
+
+        :param obj: Object to be recursively converted.
+        :param func list_fn: Conversion function applied to any :py:class:`collections.Sequence` s and :py:class:`collections.Set` s encountered. Defaults to :py:class:`tuple`.
+        :param func object_fn: Conversion function applied to all other objects encountered. Defaults to the identity function.
+
+        Usage::
+
+           >>> import maps
+           >>> fm = maps.FrozenMap.recurse({'a': 1, 'b': [2, {'c': 3}]})
+           >>> fm.b[1]
+           FrozenMap(c=3)
+        '''
         return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
 
     def __init__(self, *args, **kwargs):
