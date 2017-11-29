@@ -37,7 +37,7 @@ def _validate_defaults(fields, defaults):
 
 def _recurse(obj, map_fn=None, list_fn=None, object_fn=None):
     if map_fn is None:
-        map_fn = lambda x: x
+        map_fn = lambda x: x # pragma: no cover
     if list_fn is None:
         list_fn = lambda x: x
     if object_fn is None:
