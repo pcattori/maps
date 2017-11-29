@@ -45,4 +45,4 @@ def _recurse(obj, map_fn=lambda x: x, list_fn=lambda x: x, object_fn=lambda x: x
         return map_fn(**cls((k, _recurse(v, **kwargs)) for k,v in obj.items()))
     if isinstance(obj, (collections.Sequence, collections.Set)):
         return list_fn(cls(_recurse(v, **kwargs) for v in obj))
-    return object_fn(obj)
+    return object_fn(obj) # pragma: no cover
