@@ -5,7 +5,9 @@ Maps
 ----
 
 .. autoclass:: maps.FrozenMap
+    :members: recurse
 .. autoclass:: maps.FixedKeyMap
+    :members: recurse
 
 Named Maps
 ----------
@@ -13,7 +15,7 @@ Named Maps
 .. autofunction:: maps.namedfrozen
 .. autofunction:: maps.namedfixedkey
 .. autoclass:: maps.NamedDict
-   :members: __getattr__, __setattr__
+   :members: __getattr__, __setattr__, recurse
 
 Named Map MetaClasses
 ---------------------
