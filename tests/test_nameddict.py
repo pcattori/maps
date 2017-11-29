@@ -48,5 +48,12 @@ class NamedDictTest(unittest.TestCase):
         nd = NamedDict.recurse(obj)
         self.assertEqual(nd, NamedDict(a=1, b=[2, NamedDict(c=3)]))
 
+    def test_subclass_repr_no_infinite_recursion(self):
+        class Subclass(NamedDict):
+            pass
+
+        sub = Subclass()
+        self.assertEqual(repr(sub), 'Subclass({})')
+
 if __name__ == '__main__':
     unittest.main()
