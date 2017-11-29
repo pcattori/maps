@@ -78,6 +78,7 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
 
     @staticmethod
     def _recurse(cls, obj, list_fn=lambda x: x, object_fn=lambda x: x):
+        # TODO docstring
         return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
 
     def __new__(cls, typename, fields=[], defaults={}):

@@ -27,6 +27,7 @@ class FrozenMap(collections_abc.Mapping):
 
     @classmethod
     def recurse(cls, obj, list_fn=tuple, object_fn=lambda x: x):
+        # TODO docstring
         return utils._recurse(obj, map_fn=cls, list_fn=list_fn, object_fn=object_fn)
 
     def __init__(self, *args, **kwargs):
