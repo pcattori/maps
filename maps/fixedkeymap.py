@@ -66,3 +66,6 @@ class FixedKeyMap(collections_abc.MutableMapping):
             raise TypeError(
                 "'{}' object does not support new item assignment".format(type(self).__name__))
         self._data[name] = value
+
+    def __repr__(self): # pragma: no cover
+        return '{}({!r})'.format(type(self).__name__, self._data)
