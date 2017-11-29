@@ -27,8 +27,8 @@ author = 'Pedro Cattori'
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
-version = '5.1.0'
-release = '5.1.0'
+version = '5.1.1'
+release = '5.1.1'
 
 language = None
 
