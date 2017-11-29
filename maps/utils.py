@@ -36,11 +36,13 @@ def _validate_defaults(fields, defaults):
                     raise ValueError("non-default argument '{}' follows default argument '{}'".format(fieldAfterDefault, field))
 
 def _recurse(obj, map_fn=lambda x: x, list_fn=lambda x: x, object_fn=lambda x: x):
-    kwargs = dict(map_fn=map_fn, list_fn=list_fn, object_fn=object_fn)
     if isinstance(obj, (bool, int, float, complex, str)):
         return obj
+
+    cls = type(obj)
+    kwargs = dict(map_fn=map_fn, list_fn=list_fn, object_fn=object_fn)
     if isinstance(obj, collections.Mapping):
-        return map_fn(**{k: _recurse(v, **kwargs) for k,v in obj.items()})
+        return map_fn(**cls((k, _recurse(v, **kwargs)) for k,v in obj.items()))
     if isinstance(obj, (collections.Sequence, collections.Set)):
-        return list_fn([_recurse(v, **kwargs) for v in obj])
+        return list_fn(cls(_recurse(v, **kwargs) for v in obj))
     return object_fn(obj)
