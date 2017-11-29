@@ -147,6 +147,18 @@ class NamedFrozenMapTest(unittest.TestCase):
             str(context.exception),
             "Default argument does not correspond to any field: 'brown'")
 
+    def test_recurse(self):
+        NFM = NamedFrozenMapMeta('A', ['a', 'b'])
+        obj = {
+            "a": 1,
+            "b": [
+                2,
+                {"a": 3, "b": 4}
+            ]
+        }
+        nfm = NFM.recurse(obj)
+        self.assertEqual(nfm, NFM(a=1, b=(2, NFM(a=3, b=4))))
+
 
 if __name__ == '__main__':
     unittest.main()

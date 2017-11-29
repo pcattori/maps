@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='maps',
-    version='5.0.0',
+    version='5.1.0',
     description='Maps: flavors of Python dictionaries',
     url='https://github.com/pcattori/maps',
     author='Pedro Cattori',

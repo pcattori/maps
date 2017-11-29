@@ -144,5 +144,17 @@ class NamedFixedKeyMapMetaTest(unittest.TestCase):
             str(context.exception),
             "Default argument does not correspond to any field: 'brown'")
 
+    def test_recurse(self):
+        NFKM = NamedFixedKeyMapMeta('A', ['a', 'b'])
+        obj = {
+            "a": 1,
+            "b": [
+                2,
+                {"a": 3, "b": 4}
+            ]
+        }
+        nfkm = NFKM.recurse(obj)
+        self.assertEqual(nfkm, NFKM(a=1, b=[2, NFKM(a=3, b=4)]))
+
 if __name__ == '__main__':
     unittest.main()

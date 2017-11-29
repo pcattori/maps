@@ -37,5 +37,16 @@ class NamedDictTest(unittest.TestCase):
         self.assertEqual(nd.d, 4)
         self.assertEqual(nd['d'], 4)
 
+    def test_recurse(self):
+        obj = {
+            "a": 1,
+            "b": [
+                2,
+                {"c": 3}
+            ]
+        }
+        nd = NamedDict.recurse(obj)
+        self.assertEqual(nd, NamedDict(a=1, b=[2, NamedDict(c=3)]))
+
 if __name__ == '__main__':
     unittest.main()

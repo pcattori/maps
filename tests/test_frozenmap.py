@@ -44,5 +44,16 @@ class NamedFrozenMapTest(unittest.TestCase):
         rgb = FrozenMap(red='rouge', green='forest', blue='azul')
         self.assertEqual(frozenset(iter(rgb)), frozenset(['red', 'green', 'blue']))
 
+    def test_recurse(self):
+        obj = {
+            "a": 1,
+            "b": [
+                2,
+                {"c": 3}
+            ]
+        }
+        fm = FrozenMap.recurse(obj)
+        self.assertEqual(fm, FrozenMap(a=1, b=(2, FrozenMap(c=3))))
+
 if __name__ == '__main__':
     unittest.main()

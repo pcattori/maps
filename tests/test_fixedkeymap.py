@@ -48,5 +48,16 @@ class FixedKeyMapTest(unittest.TestCase):
             str(context.exception),
             "'FixedKeyMap' object does not support item deletion")
 
+    def test_recurse(self):
+        obj = {
+            "a": 1,
+            "b": [
+                2,
+                {"c": 3}
+            ]
+        }
+        fkm = FixedKeyMap.recurse(obj)
+        self.assertEqual(fkm, FixedKeyMap(a=1, b=[2, FixedKeyMap(c=3)]))
+
 if __name__ == '__main__':
     unittest.main()
