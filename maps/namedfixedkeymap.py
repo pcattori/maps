@@ -103,15 +103,18 @@ class NamedFixedKeyMapMeta(abc.ABCMeta):
 
         # handle custom __init__
         template = '\n'.join([
-            'def __init__(self, {args}):',
-            '    super(type(self), self).__init__()',
-            '    self._data = collections.OrderedDict({kwargs})'])
+            'def __init__(_self, {args}):',
+            '    _super(_type(_self), _self).__init__()',
+            '    _self._data = _collections.OrderedDict({kwargs})'])
         args = ', '.join([
             '{arg}={default}'.format(arg=field, default=defaults[field])
             if field in defaults else field
             for field in fields])
         kwargs = ', '.join(['{0}={0}'.format(i) for i in fields])
-        namespace = {'collections': collections}
+        namespace = {
+            '_collections': collections,
+            '_super': super,
+            '_type': type}
         exec(template.format(args=args, kwargs=kwargs), namespace)
         methods['__init__'] = namespace['__init__']
 
