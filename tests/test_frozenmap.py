@@ -49,9 +49,7 @@ class NamedFrozenMapTest(unittest.TestCase):
             "a": 1,
             "b": [
                 2,
-                {
-                    "c": 3
-                }
+                {"c": 3}
             ]
         }
         fm = FrozenMap.recurse(obj)
